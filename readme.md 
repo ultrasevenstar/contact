@@ -1,0 +1,11 @@
+# お問い合わせフォーム
+
+## ファイル構成
+- config.php
+設定ファイル
+- inquiry.php
+メイン処理
+- validation.php
+validation用
+
+## config.php
