@@ -48,7 +48,7 @@ class Inquiry
             exit;
         }
         $this->sendMail();
-
+exit;
         $_POST = [];
         $_SESSION = [];
         session_destroy();
@@ -63,10 +63,12 @@ class Inquiry
     protected function validation() {
         $validation = new Validation($this->forms, $this->validation_errors);
 
-        if(! $validation->isset_post()) {
-            return false;
-        }
         $is_error = false;
+
+        if(! $validation->isset_post()) {
+            $is_error = true;
+        }
+
 
         foreach($_POST as $name => $post) {
             if(! isset($this->forms[$name]['validation'])) {
@@ -111,8 +113,11 @@ class Inquiry
         mb_internal_encoding('utf-8');
 
         foreach($this->mail as $key => $mail) {
+            // var_dump($mail);
+            // exit;
             $mail_body = $this->buildMailBody($mail['body']);
-            mb_send_mail($mail['to'], $mail['subjecgt'], $mail_body);
+            mb_send_mail($mail['from_address'], $mail['subject'], $mail_body);
+            exit;
         }
         return true;
     }

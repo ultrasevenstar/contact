@@ -6,7 +6,9 @@ function set_error_message($key) {
     if(! isset($_SESSION['validation_error'][$key])) {
         return;
     }
-    echo '<p>' . $_SESSION['validation_error'][$key] . '</p>';
+    foreach($_SESSION['validation_error'][$key] as $error) {
+        echo '<p>' . $error . '</p>';
+    }
 }
 
 /**

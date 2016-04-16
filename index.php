@@ -14,17 +14,6 @@ if(!isset($_POST['is_return']) || !isset($_SESSION['validation_error'])) {
     <title></title>
 </head>
 <body>
-
-<p>
-<?php
-    if(isset($_SESSION['validation_error'])) {
-        foreach($_SESSION['validation_error'] as $error) {
-
-        }
-    }
-?>
-</p>
-
 <form method="post" action="inquiry.php">
 <ul>
     <li>

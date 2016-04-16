@@ -49,7 +49,7 @@ $forms = [
     ],
     'tel' => [
         'label' => '電話番号',
-        'validation' => ['required', 'int']
+        'validation' => ['required', 'tel']
     ],
     'sex' => [
         'label' => '性別',
@@ -92,6 +92,8 @@ $validation_errors = [
     'required' => '{label}は必須です',
     // メールアドレス
     'mail' => 'メールアドレスの形式が間違っております',
+    // 電話番号
+    'tel' => '電話番号の形式が間違っております',
     // 数値のみ
     'int' => '{label}は数字のみ入力可能です',
     // 最小文字数
