@@ -106,24 +106,6 @@ $validation_errors = [
 /
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
 
-// 送信元メールアドレス
-$mail_self_from_address = 'h.yanagisawa@leihauoli.com';
-// 送信元者名
-$mail_self_name = '';
-// メール件名
-$mail_self_subject = 'お問い合わせ';
-// 送信元メールアドレス
-$mail_self_to_address = 'h.yanagisawa@leihauoli.com';
-
-
-// 送信元メールアドレス
-$mail_contact_address = 'h.yanagisawa@leihauoli.com';
-// 送信元者名
-$mail_contact_name = '';
-// メール件名
-$mail_contact_subject = 'お問い合わせ';
-
-
 $mail_self_body =<<<EOF
 {last_name}{first_name}様
 
@@ -134,7 +116,7 @@ $mail_self_body =<<<EOF
 {$forms['first_name']['label']}:{first_name}
 {$forms['kana_last_name']['label']}:{kana_last_name}
 {$forms['kana_first_name']['label']}:{kana_first_name}
-{$forms['sex']['label']}:{'sex'}
+{$forms['sex']['label']}:{sex}
 EOF;
 
 
@@ -148,14 +130,27 @@ $mail_contact_body =<<<EOF
 {$forms['first_name']['label']}:{first_name}
 {$forms['kana_last_name']['label']}:{kana_last_name}
 {$forms['kana_first_name']['label']}:{kana_first_name}
-{$forms['sex']['label']}:{'sex'}
+{$forms['sex']['label']}:{sex}
 EOF;
 
 
-
 $mail = [
-    'self' =>
-        compact('mail_self_from_address', 'mail_self_name', 'mail_self_subject', 'mail_self_to_address'),
-    'contact' =>
-        compact('mail_contact_address', 'mail_contact_name', 'mail_contact_subject', 'mail_contact_body')
+    // 自社送信用メール設定
+    'self' => [
+        'from_address' => 'h.yanagisawa@leihauoli.com',
+        'from_name' => '柳沢　英俊',
+        'to_address' => 'yanagisawa@ultrasevenstar.com',
+        'subject'   => '件名',
+        'cc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
+        'bcc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
+        'body' => $mail_self_body,
+    ],
+    'contact' => [
+        'from_address' => 'h.yanagisawa@leihauoli.com',
+        'from_name' => '柳沢　英俊',
+        'subject'   => '件名',
+        'cc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
+        'bcc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
+        'body' => $mail_contact_body,
+    ],
 ];

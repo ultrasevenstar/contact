@@ -3,6 +3,8 @@ session_start();
 
 require_once('./config.php');
 require_once('./helper.php');
+
+// check_show_confirm();
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +52,7 @@ require_once('./helper.php');
 <form method="post" action="inquiry.php">
     <input type="hidden" name="is_thanks" value="1">
 <?php foreach($_SESSION['post'] as $key => $post): ?>
-    <input type="hidden" name=<?php echo $key; ?> value="<?php echo $post; ?>">
+    <input type="hidden" name="<?php echo $key; ?>" value="<?php echo $post; ?>">
 <?php endforeach; ?>
     <button type="submit">登録</button>
 </form>

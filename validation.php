@@ -16,27 +16,29 @@ class Validation
      * @return bool
      */
     public function isset_post() {
+        $is_error = false;
         foreach($this->forms as $key => $form) {
             if(! in_array('required', $form['validation'])) {
                 continue;
             }
 
             if(! isset($_POST[$key]) || !$_POST[$key]) {
-                $this->setErrorMessage('required', $form['label']);
-                return false;
+                $this->setErrorMessage('required', $key);
+                $is_error = true;
             }
         }
-        return true;
+        return $is_error === false;
     }
+
 
     /**
      * 必須項目チェック
      * @return bool
      */
-    public function required($value, $label) {
+    public function required($value, $key) {
         $value = trim($value);
         if(! $value) {
-            $this->setErrorMessage('required', $label);
+            $this->setErrorMessage('required', $key);
             return false;
         }
         return true;
@@ -99,10 +101,10 @@ class Validation
     }
 
 
-    protected function setErrorMessage($type, $label) {
-        $message = str_replace('{label}', $label, $this->validation_errors[$type]);
+    protected function setErrorMessage($type, $key) {
+        $message = str_replace('{label}', $this->forms[$key]['label'], $this->validation_errors[$type]);
 
-        $_SESSION['validation_error'] = $message;
+        $_SESSION['validation_error'][$key] = $message;
     }
 }
 

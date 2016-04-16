@@ -6,7 +6,6 @@ require_once('./validation.php');
 
 
 $inquiry = new Inquiry($forms, $validation_errors, $file_names, $mail);
-$inquiry->sendMail();
 if(isset($_POST['is_thanks'])) {
     $inquiry->thanks();
 } else {
@@ -67,16 +66,18 @@ class Inquiry
         if(! $validation->isset_post()) {
             return false;
         }
+        $is_error = false;
 
-        foreach($_POST as $key => $post) {
-            if(! isset($this->forms[$key]['validation'])) {
+        foreach($_POST as $name => $post) {
+            if(! isset($this->forms[$name]['validation'])) {
                 continue;
             }
 
-            foreach($this->forms[$key]['validation'] as $v_key => $value) {
+            // 設定されているバリデーションを先頭よりチェック。エラーの場合は次のpostに移動
+            foreach($this->forms[$name]['validation'] as $key => $value) {
                 // minとmaxの場合はkeyがvalidationのrule
-                if(! is_int($v_key)) {
-                    $validation_rule = $v_key;
+                if(! is_int($key)) {
+                    $validation_rule = $key;
                 }else{
                     $validation_rule = $value;
                 }
@@ -85,29 +86,74 @@ class Inquiry
                     continue;
                 }
 
-                if(! $validation->$validation_rule($post, $this->forms[$key]['label'], $value)) {
-                    return false;
+                if(! $validation->$validation_rule($post, $name, $value)) {
+                    $is_error = true;
+                    break;
                 }
             }
         }
 
-        $_SESSION['validation_error'] = '';
-        unset($_SESSION['validation_error']);
+        if(!$is_error) {
+            $_SESSION['validation_error'] = '';
+            unset($_SESSION['validation_error']);
+            return true;
+        }
+
+        return false;
+    }
+
+
+    /**
+     *  メール送信
+     */
+    protected function sendMail() {
+        mb_language('japanese');
+        mb_internal_encoding('utf-8');
+
+        foreach($this->mail as $key => $mail) {
+            $mail_body = $this->buildMailBody($mail['body']);
+            mb_send_mail($mail['to'], $mail['subjecgt'], $mail_body);
+        }
         return true;
     }
 
 
-    public function sendMail() {
-        preg_match_all('/{(.+?)}/', $this->mail['contact']['mail_contact_body'], $matches);
+    protected function buildMailBody($mail_body) {
+
+        // radio select checkbox用値からテキスト変換関数
+        $getTextForValue = function($key) {
+            if(! is_array($_SESSION['post'][$key]) && isset($_SESSION['post'][$key])) {
+                return $this->forms[$key]['parts'][$_SESSION['post'][$key]];
+            }elseif(! is_array($_SESSION['post'][$key]) && ! isset($_SESSION['post'][$key])) {
+                return;
+            }
+
+            $text = [];
+            foreach($_SESSION['post'][$key] as $value) {
+                if(isset($this->forms[$key]['parts'][$value])) {
+                    $text[] = $this->forms[$key]['parts'][$value];
+                }
+            }
+            return implode('/', $text);
+        };
+
+
+        preg_match_all('/{(.+?)}/', $mail_body, $matches);
 
         foreach( $matches[1] as $key ) {
-            if(preg_match("/radio\['(.+?)'\]/", $key, $matche)) {
-                var_dump($matche[]);
+            if(! isset($_SESSION['post'][$key])) {
+                continue;
             }
-            // $_SESSION['post'][$matche];
+            $value = $_SESSION['post'][$key];
+            if(isset($this->forms[$key]['parts'])) {
+                $value = $getTextForValue($key);
+            }
+            $search = '{' . $key . '}';
+            $mail_body = preg_replace("/$search/", $value, $mail_body);
         }
-        exit;
+        return $mail_body;
     }
+
 }
 
 

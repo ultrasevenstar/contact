@@ -1,5 +1,13 @@
 <?php
 require_once('./config.php');
+// require_once('./inquiry.php');
+
+function set_error_message($key) {
+    if(! isset($_SESSION['validation_error'][$key])) {
+        return;
+    }
+    echo '<p>' . $_SESSION['validation_error'][$key] . '</p>';
+}
 
 /**
  * labelタグ用テキスト表示
@@ -63,6 +71,7 @@ function set_text_for_value($name) {
     echo $forms[$name]['parts'][$_SESSION['post'][$name]];
 }
 
+
 /**
  * optionタグ作成
  * @param $name
@@ -77,6 +86,7 @@ function buid_select_option($name) {
     }
     echo $options;
 }
+
 
 /**
  * optionタグのselected判定
@@ -104,4 +114,9 @@ function set_error_messages() {
         return;
     }
     return 'selected';
+}
+
+
+function check_show_confirm() {
+    Inquiry::check_show_confirm();
 }
