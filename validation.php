@@ -1,4 +1,5 @@
 <?php
+const SESSION_VALIDATION_ERROR = 'validation_error';
 
 
 /**
@@ -7,6 +8,8 @@
 class Validation
 {
     public function __construct($forms, $validation_errors) {
+        $_SESSION[SESSION_VALIDATION_ERROR] = [];
+
         $this->forms = $forms;
         $this->validation_errors = $validation_errors;
     }
@@ -135,7 +138,7 @@ class Validation
             $message = str_replace('{value}', $value, $message);
         }
 
-        if(! isset($_SESSION['validation_error']['tel'])) {
+        if(! isset($_SESSION[SESSION_VALIDATION_ERROR][$key])) {
             $_SESSION['validation_error'][$key] = [];
         }
 

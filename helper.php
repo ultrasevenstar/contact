@@ -1,6 +1,5 @@
 <?php
 require_once('./config.php');
-// require_once('./inquiry.php');
 
 function set_error_message($key) {
     if(! isset($_SESSION['validation_error'][$key])) {
@@ -104,21 +103,17 @@ function is_selected($name, $value) {
     return 'selected';
 }
 
-/**
- * optionタグのselected判定
- * @param $name
- */
-function set_error_messages() {
-    global $forms;
 
-    if(! isset($_SESSION['post'][$name]) ||
-        $_SESSION['post'][$name] != $value) {
-        return;
+function check_show_confirm() {
+    global $file_names;
+
+    if(! isset($_SESSION['is_confirm'])) {
+        header("Location: ./{$file_names['top']}");
+        exit;
     }
-    return 'selected';
 }
 
 
-function check_show_confirm() {
-    Inquiry::check_show_confirm();
+function set_csrf() {
+    var_dump();
 }

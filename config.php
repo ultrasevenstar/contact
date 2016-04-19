@@ -1,4 +1,5 @@
 <?php
+const IS_SHOW_CONFIRM = false;
 
 /*_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/
 / 各種ファイル名
@@ -107,6 +108,14 @@ $validation_errors = [
 / メール関連
 /
 _/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/_/*/
+// // SMPTサーバー名
+// $smtp_host = ''
+// // SMTPポート番号
+// $smtp_port = '587';
+// // SMTP接続ユーザー名
+// $smtp_user = 'hoge@hoge.com';
+// // SMTP接続ユーザー名
+// $smtp_password = '';
 
 $mail_self_body =<<<EOF
 {last_name}{first_name}様
@@ -139,17 +148,17 @@ EOF;
 $mail = [
     // 自社送信用メール設定
     'self' => [
-        'from_address' => 'h.yanagisawa@leihauoli.com',
-        'from_name' => '柳沢　英俊',
-        'to_address' => 'yanagisawa@ultrasevenstar.com',
+        'from_address' => 'hoge@hoge.com',
+        'from_name' => '名前',
+        'to_address' => 'hoge@hoge.com',
         'subject'   => '件名',
         'cc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
         'bcc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
         'body' => $mail_self_body,
     ],
     'contact' => [
-        'from_address' => 'h.yanagisawa@leihauoli.com',
-        'from_name' => '柳沢　英俊',
+        'from_address' => 'hoge@hoge.com',
+        'from_name' => '',
         'subject'   => '件名',
         'cc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],
         'bcc' => ['hoge@hoge.hoge', 'hogehoge@hoge.hoge'],

@@ -4,7 +4,7 @@ session_start();
 require_once('./config.php');
 require_once('./helper.php');
 
-// check_show_confirm();
+check_show_confirm();
 ?>
 
 <!DOCTYPE html>

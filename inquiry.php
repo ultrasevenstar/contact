@@ -3,9 +3,13 @@ session_start();
 
 require_once('./config.php');
 require_once('./validation.php');
-
+require_once('./PHPMailer/PHPMailerAutoload.php');
 
 $inquiry = new Inquiry($forms, $validation_errors, $file_names, $mail);
+if(IS_SHOW_CONFIRM === false) {
+    $inquiry->thanks();
+}
+
 if(isset($_POST['is_thanks'])) {
     $inquiry->thanks();
 } else {
@@ -43,15 +47,23 @@ class Inquiry
      * thankyouページ
      */
     public function thanks() {
-        if(! isset($_SESSION['is_confirm']) || ! $this->validation()) {
+        if(count($_POST) < 1 ) {
             header("Location: ./{$this->file_name['top']}");
             exit;
         }
+
+        $_SESSION['post'] = $_POST;
+
+        if(! $this->validation()) {
+            header("Location: ./{$this->file_name['top']}");
+            exit;
+        }
+
         $this->sendMail();
-exit;
         $_POST = [];
         $_SESSION = [];
         session_destroy();
+
         header("Location: ./{$this->file_name['thanks']}");
         exit;
     }
@@ -117,7 +129,6 @@ exit;
             // exit;
             $mail_body = $this->buildMailBody($mail['body']);
             mb_send_mail($mail['from_address'], $mail['subject'], $mail_body);
-            exit;
         }
         return true;
     }

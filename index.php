@@ -3,7 +3,9 @@ session_start();
 
 require_once('./config.php');
 require_once('./helper.php');
-if(!isset($_POST['is_return']) || !isset($_SESSION['validation_error'])) {
+
+if(!isset($_POST['is_return']) && ! isset($_SESSION['validation_error'])) {
+    $_SESSION['validation_error'] = [];
     session_destroy();
 }
 ?>
@@ -15,6 +17,7 @@ if(!isset($_POST['is_return']) || !isset($_SESSION['validation_error'])) {
 </head>
 <body>
 <form method="post" action="inquiry.php">
+<?php set_csrf(); ?>
 <ul>
     <li>
         <label><?php set_label("last_name"); ?></label>
